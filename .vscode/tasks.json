@@ -1,0 +1,65 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "cmake",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "../",
+                "-DCMAKE_BUILD_TYPE=Debug"
+            ],
+            "options": {
+                "cwd": "${fileDirname}/build"
+            },            
+        },
+        {
+            "label": "make",
+            "type": "shell",
+            "command": "make",
+            "args": [],
+            "options": {
+                "cwd": "${fileDirname}/build"
+            }, 
+        },
+        {
+            "label": "build",
+            "dependsOn":["cmake", "make"]
+        },
+        {
+			"type": "cppbuild",
+			"label": "cppbuild",
+			"command": "/usr/bin/g++",
+			"args": [
+				"-g","${file}",
+				// "-lhiredis",
+				// "-lmuduo_net",
+                // "-lmuduo_base",
+				// "-g","${fileDirname}/src/*.cpp",
+				// "-I","${fileDirname}/*.h",
+				// "-I","${workspaceFolder}/CppServer/16/src/include",
+				// "-g","${workspaceFolder}/CppServer/16/src/*.cpp",
+				"-lmuduo_net",
+                "-lmuduo_base",
+                "-lpthread",
+				// "-DMUDUO_LOG_LEVEL=DEBUG",
+                "-lboost_thread",
+                "-lpthread",
+                // "-std=c++11",
+                "-std=c++20",
+				"-o","${workspaceFolder}/#Build/${fileBasenameNoExtension}"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "编译器: /usr/bin/g++"
+		}
+    ],
+}

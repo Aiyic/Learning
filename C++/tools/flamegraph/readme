@@ -1,0 +1,7 @@
+
+perf record -F 99 -p ${pid} -g  --call-graph dwarf -- sleep 10
+perf script -i perf.data &> perf.unfold
+stackcollapse-perf.pl perf.unfold &> perf.folded
+flamegraph.pl perf.folded > perf.svg
+
+perf report
