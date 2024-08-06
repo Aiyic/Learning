@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <atomic>
 
-#include <windows.h>
+#include <unistd.h>
 
 #include "blockingqueue.h"
 using namespace std;
@@ -47,7 +47,7 @@ void worker(){
             sum += i;
         }
 
-        Sleep(500);
+        usleep(500*1000);
         
         // 为cout加锁防止多线程输出错位
         {
@@ -67,7 +67,7 @@ void master(){
     for(int i = 0; i < task; i++){
         int value = rand()%10000;
         blockingqueue.push(value);
-        Sleep(60);
+        usleep(60*1000);
         {
             std::lock_guard<mutex> lock(mutex_cout);
             std::cout << "master "  
