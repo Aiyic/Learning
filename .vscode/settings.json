@@ -110,6 +110,4 @@
         "source.fixAll.eslint": "never"
     },
     "C_Cpp.default.includePath": [],
-    
-
 }
