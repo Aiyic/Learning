@@ -102,7 +102,7 @@
         "--j=5",                        // 后台线程数，可根据机器配置自行调整
         "--background-index"
     ],
-    "clangd.path": "/usr/bin/clangd-14", 
+    "clangd.path": "clangd", 
     "[cpp]": {
         "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
     },
