@@ -1,0 +1,38 @@
+; 查看coredump是否打开，如果为0，则表示coredump被关闭。
+ulimit -c
+
+; 打开coredump文件
+ulimit -c unlimited
+
+; 查看coredump文件存储位置
+cat /proc/sys/kernel/core_pattern
+
+; 使用gdb调试coredump
+gdb  coredump应用程序  coredump文件
+
+; gdb调试指令
+info threads 显示所有线程
+bt 显示线程堆栈信息
+thread thread_num   切换线程
+frame num  切换栈
+info r 显示当前帧的寄存器信息 （每一帧的寄存器信息都是不相同的）
+
+; gdb基本指令
+l / l fun函数 查看源码
+s 进入函数
+b 行号 打断点
+info b 查看断点处情况
+r 运行
+watch n 设置一个观察点，当变量被读出或写入时程序被暂停 
+display a 用于显示表达式的值
+p n 用于打印变量或表达式的值
+set i = 3 改变程序中某个变量的值
+n 单步运行
+c 继续执行
+bt 用来打印栈帧指针
+info stack 查看堆栈使用情况
+up/down 跳到上一层/下一层函数
+call func 在当前位置执行所要运行的函数
+return 5 改变程序流程，直接结束当前函数，并将指定值返回
+q 退出
+ 
