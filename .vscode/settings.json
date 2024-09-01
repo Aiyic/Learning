@@ -110,4 +110,8 @@
         "source.fixAll.eslint": "never"
     },
     "C_Cpp.default.includePath": [],
+    "clangd.checkUpdates": true,
+    "clangd.fallbackFlags": [
+        "--std=c++20"
+    ],
 }
