@@ -1,16 +1,17 @@
 
 #include <bits/stdc++.h>
-#include <unordered_map>
 
 using namespace std;
 
 class Solution {
 public:
+#if 0
   static int numDistinct(const string &s, const string &t) {
     int n = s.size();
     int m = t.size();
-    using ll = long long ;
-    vector<vector<ll>> dp(n + 1, vector<ll>(m + 1, 0));
+    const int mod = 1e9 + 7;
+    // vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
     unordered_map<char, vector<int>> rec;
     auto find_all_char = [&](char ch) {
       if (rec.find(ch) == rec.end()) {
@@ -26,29 +27,57 @@ public:
       return rec[ch];
     };
     for (int i = 0; i <= n; ++i) {
-      dp[i][0] = 1;
+      // dp[i][0] = 1;
+      dp[0][i] = 1;
     }
     for (int j = 0; j < m; ++j) {
       auto set = find_all_char(t[j]);
       if (set.empty()) {
         return 0;
       }
-      ll res = 0;
+      int res = 0;
       int now = *set.begin() + 1;
-      int count = set.size()-1;
       auto it_r = set.begin();
       while (now <= n) {
         if (it_r != set.end() && now - 1 >= *it_r) {
-          res += dp[now - 1][j];
-          res = dp[now - 1][j] * count;
+          // res += dp[now - 1][j];
+          res += dp[j][now - 1];
+          res %= mod;
+          // dp[now][j + 1] = (dp[now - 1][j + 1] + dp[now - 1][j]) % mod;
           it_r++;
         }
-        dp[now][j + 1] = res;
+        // else {
+        //   dp[now][j + 1] = dp[now - 1][j + 1];
+        // }
+        // dp[now][j + 1] = res;
+        dp[j + 1][now] = res;
         now++;
       }
     }
-    return dp[n][m] ;
+    return dp[m][n];
   }
+#else
+  static int numDistinct(const string &s, const string &t) {
+    int n = s.size();
+    int m = t.size();
+    const int mod = 1e9 + 7;
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+    for (int i = 0; i <= n; ++i) {
+      dp[0][i] = 1;
+    }
+    for (int j = 0; j < m; ++j) {
+      for(int i = 1; i<=n; ++i){
+        if (t[j] == s[i-1]) {
+          dp[j + 1][i] = (dp[j + 1][i - 1] + dp[j][i - 1]) % mod;
+        }
+        else {
+          dp[j + 1][i] = dp[j + 1][i - 1];
+        }
+      }
+    }
+    return dp[m][n];
+  }
+#endif
 };
 
 int main() {
@@ -73,7 +102,7 @@ int main() {
       "ntqbapbpofdjtulstuzdrffafedufqwsknumcxbschdybosxkrabyfdejgyozwillcxpcaie"
       "hlelczioskqtptzaczobvyojdlyflilvwqgyrqmjaeepydrcchfyftjighntqzoo";
   string s2 = "rwmimatmhydhbujebqehjprrwfkoebcxxqfktayaaeheys";
-  // auto xxxxxx = Solution::numDistinct(s1, s2); // 543744000
+  auto xxxxxx = Solution::numDistinct(s1, s2); // 543744000
   string s3 =
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -105,7 +134,7 @@ int main() {
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
   auto xxxxxxx = Solution::numDistinct(s3, s4); // 0
-  cout << 1;
+  cout << (10^9+7);
   return 0;
 }
 
