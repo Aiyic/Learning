@@ -10,7 +10,7 @@ class A{
 private:
     /* data */
 public:
-    A(){};
+    A()= default;
     virtual ~A(){};
     virtual void print(){ cout << "A" << endl; };
 };
