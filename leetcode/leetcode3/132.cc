@@ -72,5 +72,12 @@ abba b
 
 
 
+cabababcbc
+c aba babcbc
+c aba b a
+c ab aba 
 
+a aabaa
+aaa b a
+aa aba 
 */
