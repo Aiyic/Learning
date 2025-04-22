@@ -1,68 +1,83 @@
-#include<iostream>
-#include<vector>
-#include<functional>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 class Solution {
 public:
-    vector<int> findSubstring(string s, vector<string>& words) {
-        hash<string> myhash;
-        int wsize = words.size();
-        int slength = s.length();
-        int wlength = words[0].length();
-        int subs_length = wsize*wlength;
-        vector<int> wordshash;
-        for(string x : words)
-            wordshash.push_back(myhash(x));
-        
-        vector<int> results;
+  vector<int> findSubstring(const string &s, vector<string> &words) {
+    int count = words.size();
+    int word_len = words[0].size();
+    int n = s.length();
+    vector<int> res;
 
-        for(int idx=0; idx<=slength-subs_length; idx++ ){
-            string subs = string(s,idx,subs_length);
-            int flag = 1;
-            int record[5000]={0};
-            for(int i=0;i<wsize;i++){
-                string sub_word = string(subs,i*wlength,wlength);
-                int sub_word_h = myhash(sub_word);
-                int wordidx;
-                for(wordidx=0; wordidx<wsize; wordidx++){
-                    if(wordshash[wordidx] == sub_word_h && record[wordidx]==0) {
-                        if(words[wordidx] == sub_word){
-                            record[wordidx]=1;
-                            break;
-                        }
-                    }
-                }
-                if(wordidx==wsize){
-                    flag=0;
-                    break;
-                }
-            }
+    for (int pos = 0; pos < word_len; pos++) { // 0,1,2,3
+      if (pos + word_len * count > n) {
+        break;
+      }
+      unordered_map<string, int> words_map;
+      words_map.clear();
+      for (auto &word : words) {
+        words_map[word]++;
+      }
 
-            if(!flag) continue;
-
-            for(int wordidx=0; wordidx<wsize; wordidx++){
-                if(record[wordidx]==0) {
-                    flag=0;
-                }
-            }
-
-            if(flag){
-                results.push_back(idx);
-            }
+      int flag = 0; // flag = words_map.size() means all words are found
+      for (int k = pos; k < pos + word_len * count;
+           k += word_len) { // windows start
+        string sub = string(s, k, word_len);
+        if (words_map.contains(sub)) {
+          words_map[sub]--;
+          if (words_map[sub] == 0) {
+            flag++;
+          } else if (words_map[sub] == -1) {
+            flag--;
+          }
         }
-        return results;
+      }
+
+      int left = pos;
+      int right = pos + (count * word_len);
+      if (flag == words_map.size()) {
+        res.push_back(left);
+      }
+
+      while (right <= n - word_len) {
+        string left_word = string(s, left, word_len);
+        string right_word = string(s, right, word_len);
+
+        if (words_map.contains(left_word)) {
+          if (words_map[left_word] == 0) {
+            flag--;
+          } else if (words_map[left_word] == -1) {
+            flag++;
+          }
+          words_map[left_word]++;
+        }
+        if (words_map.contains(right_word)) {
+          words_map[right_word]--;
+          if (words_map[right_word] == 0) {
+            flag++;
+          } else if (words_map[right_word] == -1) {
+            flag--;
+          }
+        }
+        left += word_len;
+        right += word_len;
+        if (flag == words_map.size()) {
+          res.push_back(left);
+        }
+      }
     }
+    return res;
+  }
 };
 
 int main() {
-    Solution x;
-    string s = "barfoofoobarthefoobarman";
-    vector<string> words;
-    words.push_back("bar");
-    words.push_back("foo");
-    words.push_back("the");
-    vector<int> a = x.findSubstring(s,words);
-    return 0;
+  Solution x;
+  string s = "a";
+  vector<string> words = {"a"};
+  //   string s = "barfoofoobarthefoobarman";
+  //   vector<string> words = {"bar", "foo", "the"};
+
+  vector<int> a = x.findSubstring(s, words);
+  return 0;
 }
